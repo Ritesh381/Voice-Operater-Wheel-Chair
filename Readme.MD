@@ -4,6 +4,11 @@ A low-cost, Arduino-based wheelchair control system that allows users to move th
 
 ---
 
+## 🎥 Demo Video
+https://www.youtube.com/watch?v=zSyl6eb3zLo
+
+---
+
 ## 🚀 Features
 - Fully voice-controlled movement through a smartphone app  
 - Bluetooth-based communication with the microcontroller  
