@@ -1,0 +1,97 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial BT(0, 1); //TX, RX respetively
+
+String readvoice;
+
+void setup() {
+    BT.begin(9600);
+    Serial.begin(9600);
+  
+    // RX, TX
+    pinMode(0, INPUT);
+    pinMode(1, OUTPUT);
+  
+    // Motor movement
+    pinMode(3, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+    pinMode(6, OUTPUT);
+}
+//-----------------------------------------------------------------------// 
+void move_forward()
+{
+    digitalWrite(3, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(5, HIGH);
+    digitalWrite(6, LOW);
+}
+
+void move_back()
+{
+    digitalWrite(3, LOW);
+    digitalWrite(4, HIGH);
+    digitalWrite(5, LOW);
+    digitalWrite(6, HIGH);  
+}
+
+void move_left()
+{
+    digitalWrite(3, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW); 
+    delay(3000);
+    digitalWrite(3, HIGH);
+    digitalWrite(4, HIGH);
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW);
+}
+
+void move_right()
+{
+   digitalWrite(3, LOW);
+   digitalWrite(4, LOW);
+   digitalWrite(5, HIGH);
+   digitalWrite(6, LOW);
+   delay(3000);
+   digitalWrite(3, HIGH);
+   digitalWrite(4, HIGH);
+   digitalWrite(5, LOW);
+   digitalWrite(6, LOW);
+}
+
+void move_stop()
+{
+   digitalWrite(3, LOW);
+   digitalWrite(4, LOW);
+   digitalWrite(5, LOW);
+   digitalWrite(6, LOW);
+}
+
+void loop() {
+  while (BT.available()){  //Check if there is an available byte to read
+      delay(10); //Delay added to make thing stable
+//    char c = BT.read(); //Conduct a serial read
+//    readvoice += c; //build the string- "forward", "back", "left" and "right"
+
+      readvoice = BT.readString();
+      if (readvoice.length() > 0) {
+        Serial.println(readvoice);
+        if (readvoice == "*forward#") {
+          move_forward();
+        } else if (readvoice == "*back#") {
+          move_back();
+        } else if (readvoice == "*left#") {
+          move_left();
+          move_forward();
+        } else if (readvoice == "*right#") {
+          move_right();
+          move_forward();
+        } else if (readvoice == "*stop#") {
+          move_stop();
+        }
+    }
+//    readvoice=""; //Reset the variable
+  }
+} 
